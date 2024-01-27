@@ -46,6 +46,11 @@ body {
     -webkit-animation: horizontal-shaking 0.35s 5;
 }
 
+.hidden {
+    visibility: hidden;
+}
+
+
 @keyframes horizontal-shaking {
     0% { transform: translateX(0) }
     25% { transform: translateX(5px) }
@@ -68,4 +73,77 @@ body {
     font-weight: 400;
     font-style: normal;
     font-size: 8rem;
+    margin-bottom: 10px;
+    margin-top: 10px;
+}
+
+.congratsText {
+    color: #cfd7c7;
+    font-size: 2rem;
+    font-family: "Cedarville Cursive", cursive;
+    font-weight: 400;
+    font-style: normal;
+    margin-left: 20px;
+    margin-right: 20px;
+}
+
+.initialLoad {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.letsPlayText {
+    color: #cfd7c7;
+    margin-top: 100px;
+    font-size: 3rem;
+    font-family: "Cedarville Cursive", cursive;
+    font-weight: 400;
+    font-style: normal;
+    margin-left: 20px;
+    margin-right: 20px;
+    overflow: hidden;
+    white-space: nowrap; 
+    letter-spacing: .15em; 
+    animation: typewriter 2s steps(30, end);
+}
+
+@keyframes typewriter {
+    0% {width: 0;}
+    100% {width: 100%;}
+  }
+
+@keyframes type {
+    0% { width: 0;}
+    1% {opacity: 1; visibility: visible; }
+    100% { width: 100%; opacity: 1; }
+}
+
+.playGameButton {
+    font-family: "Cedarville Cursive", cursive;
+    font-size: 2rem;
+    color: #0b2027;
+    padding: 10px;
+    background-color: #cfd7c7;
+    border-radius: 25px;
+    margin: 5px;
+    cursor: pointer;
+    transition: opacity 1s;
+}
+
+.playGameButton:hover {
+    opacity: .6;
+}
+
+.buttonContainer {
+    display: grid;
+    grid-template-columns: 1fr 1fr
+}
+
+@media screen and (max-width: 600px) {
+    .buttonContainer {
+        display: grid;
+        grid-template-columns: 1fr
+    }
 }

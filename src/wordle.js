@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react"
+import { Fragment, useEffect, useRef, useState } from "react"
 import { guessWord } from "./api/wordle"
 import styles from './worldle.module.css'
 import Snackbar from '@mui/material/Snackbar';
@@ -27,6 +27,9 @@ const Wordle = (props) => {
     const [snackbarState, setSnackbarState] = useState(snackbarInitialState)
     const [wordsAndStatus, setWordsAndStatus] = useState([])
     const [error, setError] = useState(false)
+    const [wordFound, setWordFound] = useState(false)
+    const [play, setPlay] = useState(false)
+
 
     const handleKeyPress = (event) => {
         let keyPressed = event?.key
@@ -51,6 +54,7 @@ const Wordle = (props) => {
                             setColors(currentWord, response.score)
                             if(response.score.reduce((sum,i)=>sum+i) == props.wordLength*2) {
                                 toast('Found out the correct word!!', bgColorCode.sucessColor)
+                                setWordFound(true)
                             }else {
                                 setCurrentWord(prev=> prev+1)
                                 setCurrentLetter(1)
@@ -116,12 +120,24 @@ const Wordle = (props) => {
         guesses.push(<div id={`guess-${i}`} className={styles.guess}>{boxes}</div>)
     }
     
+
     return (<div className={styles.wordleContainer} id='wordle-container'>
         <h1 className={styles.gameTitle}>Wordle</h1>
-        <Snackbar   ContentProps={{sx: {background: snackbarState.bgcolor, color: '#0b2027'}
-  }} anchorOrigin={{ vertical: 'top', horizontal: 'center' }} open={snackbarState.open} message={snackbarState.message}  />
-        <div onAnimationEnd={()=>setError(false)} className={`${styles.guessContainer} ${error ? styles.shakeAnimation : ''}`}>{guesses}</div>
-    </div>)
+           {play && <Fragment>
+            <p className={`${styles.congratsText} ${wordFound ? '' : styles.hidden}`}>Congratulations! You found out the word in your trial - {currentWord}</p>
+            <Snackbar ContentProps={{sx: {background: snackbarState.bgcolor, color: '#0b2027'}
+    }} anchorOrigin={{ vertical: 'top', horizontal: 'center' }} open={snackbarState.open} message={snackbarState.message}  />
+            <div onAnimationEnd={()=>setError(false)} className={`${styles.guessContainer} ${error ? styles.shakeAnimation : ''}`}>{guesses}</div>
+            </Fragment>}
+            {!play && 
+            <div className={styles.initialLoad}>
+                <div className={styles.letsPlayText}>Let's play?</div>
+                <div className={styles.buttonContainer}>
+                    <button onClick={()=>setPlay(true)} className={styles.playGameButton}>Yes!!</button>
+                    <button onClick={()=>setPlay(true)} className={styles.playGameButton}>Always Yes!!</button>
+                </div>
+            </div>}
+       </div>)
 }
 
 export default Wordle
