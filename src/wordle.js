@@ -5,20 +5,28 @@ import Snackbar from '@mui/material/Snackbar';
 
 const snackbarInitialState = {
     open: false,
-    message: ''
+    message: '',
+    bgcolor: 'black'
 }
 
 const fillColorCode = {
     0: '#7077A1', // Grey: Letter Does not Exist
-    1: '#F2BE22', // Yellow: Letter exists, but position wrong
+    1: '#E7B10A', // Yellow: Letter exists, but position wrong
     2: '#9DBC98' // Green: Letter exists and in correct position
 }
+
+const bgColorCode = {
+    errorColor: '#D04848',
+    sucessColor: '#96E9C6'
+}
+
 const Wordle = (props) => {
     const inputRefs = useRef([]);
     const [currentWord, setCurrentWord] = useState(1)
     const [currentLetter, setCurrentLetter] = useState(1)
     const [snackbarState, setSnackbarState] = useState(snackbarInitialState)
     const [wordsAndStatus, setWordsAndStatus] = useState([])
+    const [error, setError] = useState(false)
 
     const handleKeyPress = (event) => {
         let keyPressed = event?.key
@@ -35,19 +43,26 @@ const Wordle = (props) => {
                     .then(response => {
                         console.log(response);
                         if (response && !response.is_valid_word) {
-                            toast('Not a valid word!!')
+                            toast('Not a valid word!!', bgColorCode.errorColor)
+                            setError(true)
+                            
                         }else if(response && response.score) {
                             setWordsAndStatus([...wordsAndStatus, {word: word, status: response.score}])
                             setColors(currentWord, response.score)
-                            setCurrentWord(prev=> prev+1)
-                            setCurrentLetter(1)
+                            if(response.score.reduce((sum,i)=>sum+i) == props.wordLength*2) {
+                                toast('Found out the correct word!!', bgColorCode.sucessColor)
+                            }else {
+                                setCurrentWord(prev=> prev+1)
+                                setCurrentLetter(1)
+                            }
                         }
                     })
                     .catch(error => {
                         console.error(error); // Handle the error here
                     });
             }else {
-                toast('Not Enough Letters!!')
+                toast('Not Enough Letters!!', bgColorCode.errorColor);
+                setError(true)
             }
         }else if(keyPressed === "Backspace") {
             let newCurrent = currentLetter;
@@ -63,10 +78,10 @@ const Wordle = (props) => {
         }
 
     }
-    const toast = (msg) => {
-        setSnackbarState({open: true, message: msg});
+    const toast = (msg, bgcolor) => {
+        setSnackbarState({open: true, message: msg, bgcolor: bgcolor});
         setTimeout(() => {
-            setSnackbarState({open: false, message: ''});
+            setSnackbarState({...snackbarState, open: false, message: ''});
         }, 3000)
     }
     const findTheWord = (currentWord) => {
@@ -102,8 +117,10 @@ const Wordle = (props) => {
     }
     
     return (<div className={styles.wordleContainer} id='wordle-container'>
-        <Snackbar anchorOrigin={{ vertical: 'top', horizontal: 'center' }} open={snackbarState.open} message={snackbarState.message}  />
-        <div className={styles.guessContainer}>{guesses}</div>
+        <h1 className={styles.gameTitle}>Wordle</h1>
+        <Snackbar   ContentProps={{sx: {background: snackbarState.bgcolor, color: '#0b2027'}
+  }} anchorOrigin={{ vertical: 'top', horizontal: 'center' }} open={snackbarState.open} message={snackbarState.message}  />
+        <div onAnimationEnd={()=>setError(false)} className={`${styles.guessContainer} ${error ? styles.shakeAnimation : ''}`}>{guesses}</div>
     </div>)
 }
 

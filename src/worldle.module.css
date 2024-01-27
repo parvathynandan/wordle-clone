@@ -1,5 +1,6 @@
 body {
     background-color: #0b2027;
+    padding-bottom: 200px;
 }
 
 .wordleContainer {
@@ -10,12 +11,11 @@ body {
     justify-content: center;
     align-items: center;
     flex-direction: column;
-    padding-top: 100px;
 }
 
-.guessContainer {
-    margin-top: 50px;
-}
+/* .guessContainer {
+    margin-top: 10px;
+} */
 
 .guess {
     display: grid;
@@ -35,4 +35,37 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
+    font-weight: bold;
+    color: #0b2027;
+    /* animation: horizontal-shaking 0.35s 5;
+    -webkit-animation: horizontal-shaking 0.35s 5; */
+}
+
+.shakeAnimation {
+    animation: horizontal-shaking 0.35s 5;
+    -webkit-animation: horizontal-shaking 0.35s 5;
+}
+
+@keyframes horizontal-shaking {
+    0% { transform: translateX(0) }
+    25% { transform: translateX(5px) }
+    50% { transform: translateX(-5px) }
+    75% { transform: translateX(5px) }
+    100% { transform: translateX(0) }
+}
+
+@-webkit-keyframes horizontal-shaking {
+    0% { transform: translateX(0) }
+    25% { transform: translateX(5px) }
+    50% { transform: translateX(-5px) }
+    75% { transform: translateX(5px) }
+    100% { transform: translateX(0) }
+}
+
+.gameTitle {
+    color: #cfd7c7;
+    font-family: "Poor Story", system-ui;
+    font-weight: 400;
+    font-style: normal;
+    font-size: 8rem;
 }
