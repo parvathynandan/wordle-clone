@@ -77,6 +77,30 @@ body {
     margin-top: 10px;
 }
 
+.gameTitle  span {
+    color: #F3B95F;
+    display:inline-block;
+    animation: bounce 5s ease infinite;
+    -webkit-animation: bounce 5s ease infinite;
+}
+@keyframes bounce { 
+    0% {transform: translateY(0);} 
+    5% {transform: translateY(-30px);} 
+    10% {transform: translateY(0);} 
+    15% {transform: translateY(-15px);} 
+    20% {transform: translateY(10px);} 
+    25% {transform: translateY(0);} 
+ }
+
+ @-webkit-keyframes bounce { 
+
+    0% {-webkit-transform: translateY(0);} 
+    5% {-webkit-transform: translateY(-30px);} 
+    10% {-webkit-transform: translateY(0);} 
+    15% {-webkit-transform: translateY(-15px);} 
+    20% {-webkit-transform: translateY(10px);} 
+    25% {-webkit-transform: translateY(0);} 
+ } 
 .congratsText {
     color: #cfd7c7;
     font-size: 2rem;

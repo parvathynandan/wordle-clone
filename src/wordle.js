@@ -122,7 +122,7 @@ const Wordle = (props) => {
     
 
     return (<div className={styles.wordleContainer} id='wordle-container'>
-        <h1 className={styles.gameTitle}>Wordle</h1>
+        <p className={styles.gameTitle}><span>W</span>ordle</p>
            {play && <Fragment>
             <p className={`${styles.congratsText} ${wordFound ? '' : styles.hidden}`}>Congratulations! You found out the word in your trial - {currentWord}</p>
             <Snackbar ContentProps={{sx: {background: snackbarState.bgcolor, color: '#0b2027'}
