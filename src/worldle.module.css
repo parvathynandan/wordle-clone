@@ -1,11 +1,20 @@
+body {
+    background-color: #0b2027;
+}
+
 .wordleContainer {
     /* display: flex;
     justify-content: center;
     align-content: center; */
-    background-color: whitesmoke;
     display: flex;
     justify-content: center;
     align-items: center;
+    flex-direction: column;
+    padding-top: 100px;
+}
+
+.guessContainer {
+    margin-top: 50px;
 }
 
 .guess {
@@ -17,7 +26,8 @@
 }
 
 .box{
-    border: 1px solid grey;
+    border: 3px solid #cfd7c7;
+    background-color: #cfd7c7;
     border-radius: 20px;
     height: 50px;
     box-shadow: 1px 2px 6px #302e34;

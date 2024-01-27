@@ -1,11 +1,24 @@
 import { useEffect, useRef, useState } from "react"
 import { guessWord } from "./api/wordle"
 import styles from './worldle.module.css'
+import Snackbar from '@mui/material/Snackbar';
 
+const snackbarInitialState = {
+    open: false,
+    message: ''
+}
+
+const fillColorCode = {
+    0: '#7077A1', // Grey: Letter Does not Exist
+    1: '#F2BE22', // Yellow: Letter exists, but position wrong
+    2: '#9DBC98' // Green: Letter exists and in correct position
+}
 const Wordle = (props) => {
     const inputRefs = useRef([]);
     const [currentWord, setCurrentWord] = useState(1)
     const [currentLetter, setCurrentLetter] = useState(1)
+    const [snackbarState, setSnackbarState] = useState(snackbarInitialState)
+    const [wordsAndStatus, setWordsAndStatus] = useState([])
 
     const handleKeyPress = (event) => {
         let keyPressed = event?.key
@@ -17,9 +30,24 @@ const Wordle = (props) => {
             
         }else if(keyPressed === "Enter") {
             if(currentLetter==props.wordLength+1) {
-
+                let word = findTheWord(currentWord);
+                guessWord(word)
+                    .then(response => {
+                        console.log(response);
+                        if (response && !response.is_valid_word) {
+                            toast('Not a valid word!!')
+                        }else if(response && response.score) {
+                            setWordsAndStatus([...wordsAndStatus, {word: word, status: response.score}])
+                            setColors(currentWord, response.score)
+                            setCurrentWord(prev=> prev+1)
+                            setCurrentLetter(1)
+                        }
+                    })
+                    .catch(error => {
+                        console.error(error); // Handle the error here
+                    });
             }else {
-                alert('Not enough Letters')
+                toast('Not Enough Letters!!')
             }
         }else if(keyPressed === "Backspace") {
             let newCurrent = currentLetter;
@@ -32,6 +60,29 @@ const Wordle = (props) => {
             }
         }else {
             console.log('Not a letter or word limit reached', keyPressed)
+        }
+
+    }
+    const toast = (msg) => {
+        setSnackbarState({open: true, message: msg});
+        setTimeout(() => {
+            setSnackbarState({open: false, message: ''});
+        }, 3000)
+    }
+    const findTheWord = (currentWord) => {
+        let word = ''
+        for (let i=1; i<=props.wordLength; i++) {
+            if(inputRefs?.current[currentWord][i]?.innerHTML) {
+                word = word + inputRefs?.current[currentWord][i]?.innerHTML
+            }
+        }
+        console.log(word)
+        return word
+    }
+
+    const setColors = (currentWord, score) => {
+        for(let i=1;i<=props.wordLength;i++) {
+            inputRefs.current[currentWord][i].style.backgroundColor = fillColorCode[score[i-1]];
         }
     }
 
@@ -51,6 +102,7 @@ const Wordle = (props) => {
     }
     
     return (<div className={styles.wordleContainer} id='wordle-container'>
+        <Snackbar anchorOrigin={{ vertical: 'top', horizontal: 'center' }} open={snackbarState.open} message={snackbarState.message}  />
         <div className={styles.guessContainer}>{guesses}</div>
     </div>)
 }
