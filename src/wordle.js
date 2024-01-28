@@ -31,6 +31,49 @@ const Wordle = (props) => {
     const [wordFound, setWordFound] = useState(false)
     const [play, setPlay] = useState(false)
     const [seeGameRules, setSeeGameRules] = useState(false)
+    const [refreshMessage, setRefreshMessage] = useState(false)
+    useEffect(() => {
+        if(play) {
+            let wordsStatusFromLocalStorage = JSON.parse(localStorage.getItem('wordsAndStatus'));
+            let wordFoundFromLocalStorage = localStorage.getItem('wordFound');
+            let expiry = localStorage.getItem('wordStatusExpiry');
+            let now = new Date()
+            if (now.getTime() > expiry) {
+                localStorage.clear();
+            }else {
+                if(wordsStatusFromLocalStorage) {
+                    setRefreshMessage(true)
+                    setWordsAndStatus(wordsStatusFromLocalStorage)
+                    addItemsInBoxes(wordsStatusFromLocalStorage)
+                    console.log(wordsStatusFromLocalStorage)
+                    console.log('inputRefs', inputRefs)
+                    setCurrentWord(wordsStatusFromLocalStorage.length+1)    
+                    if(wordFoundFromLocalStorage) {
+                        setWordFound(true)
+                        setCurrentWord(wordsStatusFromLocalStorage.length) 
+                    }            
+                }
+            }            
+        }
+    }, [play])
+
+    const addItemsInBoxes = (wordsStatusFromLocalStorage) => {
+        wordsStatusFromLocalStorage.map((item, i) => {
+            let letterPos = 1;
+            for(let letter of item.word) {
+                if (inputRefs?.current[i+1][letterPos] && !inputRefs?.current[i+1][letterPos].innerHTML) {
+                    inputRefs.current[i+1][letterPos].innerHTML = letter;
+                }
+                letterPos++;
+            }
+
+            let statusPos = 1;
+            for(let status of item.status) {
+                inputRefs.current[i+1][statusPos].style.backgroundColor = fillColorCode[status];
+                statusPos++
+            }
+        })
+    }
 
     const handleKeyPress = (event) => {
         if(play && !seeGameRules && currentWord<=props.maxGuesses){
@@ -52,11 +95,16 @@ const Wordle = (props) => {
                             setError(true)
                             
                         }else if(response && response.score) {
+                            let wordStatusLocalStorage = [...wordsAndStatus, {word: word, status: response.score}]
+                            localStorage.setItem('wordsAndStatus', JSON.stringify(wordStatusLocalStorage));
+                            const now = new Date();
+                            localStorage.setItem('wordStatusExpiry', now.getTime() + 20*1000)
                             setWordsAndStatus([...wordsAndStatus, {word: word, status: response.score}])
                             setColors(currentWord, response.score)
                             if(response.score.reduce((sum,i)=>sum+i) == props.wordLength*2) {
                                 toast('Found out the correct word!!', bgColorCode.sucessColor)
                                 setWordFound(true)
+                                localStorage.setItem('wordFound', true);
                             }else {
                                 setCurrentWord(prev=> prev+1)
                                 setCurrentLetter(1)
@@ -134,9 +182,11 @@ const Wordle = (props) => {
             {seeGameRules && <ScrollDialog setGameRules={handleClose} />}
            {play && <Fragment>
             <p className={`${styles.congratsText} ${wordFound ? '' : styles.hidden}`}>Congratulations! You found out the word in your trial - {currentWord}</p>
+            <p className={`${styles.refreshMessage} ${refreshMessage ? '' : styles.hidden}`}>This is where you left off last time...</p>
             <Snackbar ContentProps={{sx: {background: snackbarState.bgcolor, color: '#0b2027'}
     }} anchorOrigin={{ vertical: 'top', horizontal: 'center' }} open={snackbarState.open} message={snackbarState.message}  />
             <div onAnimationEnd={()=>setError(false)} className={`${styles.guessContainer} ${error ? styles.shakeAnimation : ''}`}>{guesses}</div>
+            {/* <button className={styles.playAgain} >Play Again</button> */}
             </Fragment>}
             {!play && 
             <div className={styles.initialLoad}>

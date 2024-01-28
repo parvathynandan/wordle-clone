@@ -80,8 +80,8 @@ body {
 .gameTitle  span {
     color: #F3B95F;
     display:inline-block;
-    animation: bounce 5s ease infinite;
-    -webkit-animation: bounce 5s ease infinite;
+    animation: bounce 3s ease infinite;
+    -webkit-animation: bounce 3s ease infinite;
 }
 
 .seeGameRules {
@@ -95,6 +95,20 @@ body {
     margin: 5px;
     cursor: pointer;
     transition: opacity 1s;
+}
+
+.playAgain {
+    font-family: "Cedarville Cursive", cursive;
+    font-size: 1.2rem;
+    color: #cfd7c7;
+    border: 5px solid #cfd7c7;
+    padding: 10px;
+    background-color: #0b2027;
+    border-radius: 25px;
+    margin: 5px;
+    cursor: pointer;
+    transition: opacity 1s;
+    margin-top: 50px; 
 }
 
 @keyframes bounce { 
@@ -121,6 +135,18 @@ body {
     font-family: "Cedarville Cursive", cursive;
     font-weight: 400;
     font-style: normal;
+    margin-left: 20px;
+    margin-right: 20px;
+    margin-bottom: 0px;
+}
+
+.refreshMessage {
+    color: #F3B95F;
+    font-size: 1.5rem;
+    font-family: "Dosis", sans-serif;
+    font-weight: 800;
+    font-style: normal;
+    margin-top: 1px;
     margin-left: 20px;
     margin-right: 20px;
 }
