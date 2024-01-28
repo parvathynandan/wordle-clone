@@ -33,7 +33,7 @@ const Wordle = (props) => {
     const [seeGameRules, setSeeGameRules] = useState(false)
 
     const handleKeyPress = (event) => {
-        if(play && !seeGameRules){
+        if(play && !seeGameRules && currentWord<=props.maxGuesses){
         let keyPressed = event?.key
         if(currentLetter<=props.wordLength && event?.keyCode >= 65 && event.keyCode <= 90 || event.keyCode >= 97 && event?.keyCode <= 122) {
             if (inputRefs?.current[currentWord][currentLetter] && !inputRefs?.current[currentWord][currentLetter].innerHTML) {
@@ -82,6 +82,8 @@ const Wordle = (props) => {
         }else {
             console.log('Not a letter or word limit reached', keyPressed)
         }
+    }else if(currentWord>props.maxGuesses) {
+        toast('You are out of guesses! Refresh to restart the game', bgColorCode.errorColor);
     }
     }
     const toast = (msg, bgcolor) => {
