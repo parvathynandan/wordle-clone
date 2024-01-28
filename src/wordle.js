@@ -32,6 +32,7 @@ const Wordle = (props) => {
 
 
     const handleKeyPress = (event) => {
+        if(play){
         let keyPressed = event?.key
         if(currentLetter<=props.wordLength && event?.keyCode >= 65 && event.keyCode <= 90 || event.keyCode >= 97 && event?.keyCode <= 122) {
             if (inputRefs?.current[currentWord][currentLetter] && !inputRefs?.current[currentWord][currentLetter].innerHTML) {
@@ -80,7 +81,7 @@ const Wordle = (props) => {
         }else {
             console.log('Not a letter or word limit reached', keyPressed)
         }
-
+    }
     }
     const toast = (msg, bgcolor) => {
         setSnackbarState({open: true, message: msg, bgcolor: bgcolor});
