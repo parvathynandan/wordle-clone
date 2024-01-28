@@ -83,6 +83,19 @@ body {
     animation: bounce 5s ease infinite;
     -webkit-animation: bounce 5s ease infinite;
 }
+
+.seeGameRules {
+    background: none!important;
+    border: none;
+    padding: 0!important;
+    /*optional*/
+    font-family: arial, sans-serif;
+    /*input has OS specific font-family*/
+    color: #cfd7c7;
+    text-decoration: underline;
+    cursor: pointer;
+}
+
 @keyframes bounce { 
     0% {transform: translateY(0);} 
     5% {transform: translateY(-30px);} 
