@@ -106,6 +106,9 @@ const Wordle = (props) => {
                                 setWordFound(true)
                                 localStorage.setItem('wordFound', true);
                             }else {
+                                if(currentWord===props.maxGuesses) {
+                                    toast('You are out of guesses! Try again later', bgColorCode.errorColor);
+                                }
                                 setCurrentWord(prev=> prev+1)
                                 setCurrentLetter(1)
                             }
@@ -131,7 +134,7 @@ const Wordle = (props) => {
             console.log('Not a letter or word limit reached', keyPressed)
         }
     }else if(currentWord>props.maxGuesses) {
-        toast('You are out of guesses! Refresh to restart the game', bgColorCode.errorColor);
+        toast('You are out of guesses! Try again later', bgColorCode.errorColor);
     }
     }
     const toast = (msg, bgcolor) => {
