@@ -2,6 +2,7 @@ import { Fragment, useEffect, useRef, useState } from "react"
 import { guessWord } from "./api/wordle"
 import styles from './worldle.module.css'
 import Snackbar from '@mui/material/Snackbar';
+import ScrollDialog from "./GameRuleDialog";
 
 const snackbarInitialState = {
     open: false,
@@ -29,10 +30,10 @@ const Wordle = (props) => {
     const [error, setError] = useState(false)
     const [wordFound, setWordFound] = useState(false)
     const [play, setPlay] = useState(false)
-
+    const [seeGameRules, setSeeGameRules] = useState(false)
 
     const handleKeyPress = (event) => {
-        if(play){
+        if(play && !seeGameRules){
         let keyPressed = event?.key
         if(currentLetter<=props.wordLength && event?.keyCode >= 65 && event.keyCode <= 90 || event.keyCode >= 97 && event?.keyCode <= 122) {
             if (inputRefs?.current[currentWord][currentLetter] && !inputRefs?.current[currentWord][currentLetter].innerHTML) {
@@ -121,9 +122,14 @@ const Wordle = (props) => {
         guesses.push(<div id={`guess-${i}`} className={styles.guess}>{boxes}</div>)
     }
     
+    const handleClose = () => {
+        setSeeGameRules(false)
+    }
 
     return (<div className={styles.wordleContainer} id='wordle-container'>
         <p className={styles.gameTitle}><span>W</span>ordle</p>
+            <button onClick={() => setSeeGameRules(true)}>See Game Rules</button>
+            {seeGameRules && <ScrollDialog setGameRules={handleClose} />}
            {play && <Fragment>
             <p className={`${styles.congratsText} ${wordFound ? '' : styles.hidden}`}>Congratulations! You found out the word in your trial - {currentWord}</p>
             <Snackbar ContentProps={{sx: {background: snackbarState.bgcolor, color: '#0b2027'}
