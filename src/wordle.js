@@ -76,7 +76,7 @@ const Wordle = (props) => {
     }
 
     const handleKeyPress = (event) => {
-        if(play && !seeGameRules && currentWord<=props.maxGuesses){
+        if(play && !seeGameRules && currentWord<=props.maxGuesses && !wordFound){
         let keyPressed = event?.key
         if(currentLetter<=props.wordLength && event?.keyCode >= 65 && event.keyCode <= 90 || event.keyCode >= 97 && event?.keyCode <= 122) {
             if (inputRefs?.current[currentWord][currentLetter] && !inputRefs?.current[currentWord][currentLetter].innerHTML) {
@@ -84,7 +84,7 @@ const Wordle = (props) => {
             }
             setCurrentLetter(prevState=>prevState+1)
             
-        }else if(keyPressed === "Enter" && !wordFound) {
+        }else if(keyPressed === "Enter") {
             if(currentLetter==props.wordLength+1) {
                 let word = findTheWord(currentWord);
                 guessWord(word)
