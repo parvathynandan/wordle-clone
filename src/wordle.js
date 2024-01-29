@@ -84,7 +84,7 @@ const Wordle = (props) => {
             }
             setCurrentLetter(prevState=>prevState+1)
             
-        }else if(keyPressed === "Enter") {
+        }else if(keyPressed === "Enter" && !wordFound) {
             if(currentLetter==props.wordLength+1) {
                 let word = findTheWord(currentWord);
                 guessWord(word)
