@@ -127,7 +127,7 @@ const Wordle = (props) => {
                 newCurrent =  currentLetter-1
             }
             setCurrentLetter(newCurrent)
-            if (inputRefs?.current[currentWord][newCurrent]?.innerHTML) {
+            if (inputRefs?.current[currentWord][newCurrent] && inputRefs?.current[currentWord][newCurrent]?.innerHTML) {
                 inputRefs.current[currentWord][newCurrent].innerHTML = '';
             }
         }else {
@@ -146,7 +146,7 @@ const Wordle = (props) => {
     const findTheWord = (currentWord) => {
         let word = ''
         for (let i=1; i<=props.wordLength; i++) {
-            if(inputRefs?.current[currentWord][i]?.innerHTML) {
+            if(inputRefs?.current[currentWord][i] && inputRefs?.current[currentWord][i]?.innerHTML) {
                 word = word + inputRefs?.current[currentWord][i]?.innerHTML
             }
         }
