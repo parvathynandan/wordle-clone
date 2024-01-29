@@ -61,7 +61,7 @@ const Wordle = (props) => {
         wordsStatusFromLocalStorage.map((item, i) => {
             let letterPos = 1;
             for(let letter of item.word) {
-                if (inputRefs?.current[i+1][letterPos] && !inputRefs?.current[i+1][letterPos].innerHTML) {
+                if (inputRefs && inputRefs?.current[i+1][letterPos] && !inputRefs?.current[i+1][letterPos].innerHTML) {
                     inputRefs.current[i+1][letterPos].innerHTML = letter;
                 }
                 letterPos++;
@@ -69,7 +69,9 @@ const Wordle = (props) => {
 
             let statusPos = 1;
             for(let status of item.status) {
-                inputRefs.current[i+1][statusPos].style.backgroundColor = fillColorCode[status];
+                if(inputRefs && inputRefs.current[i+1][statusPos] && inputRefs.current[i+1][statusPos].style) {
+                    inputRefs.current[i+1][statusPos].style.backgroundColor = fillColorCode[status];
+                }
                 statusPos++
             }
         })
@@ -79,7 +81,7 @@ const Wordle = (props) => {
         if(play && !seeGameRules && currentWord<=props.maxGuesses && !wordFound){
         let keyPressed = event?.key
         if(currentLetter<=props.wordLength && event?.keyCode >= 65 && event.keyCode <= 90 || event.keyCode >= 97 && event?.keyCode <= 122) {
-            if (inputRefs?.current[currentWord][currentLetter] && !inputRefs?.current[currentWord][currentLetter].innerHTML) {
+            if (inputRefs && inputRefs?.current[currentWord][currentLetter] && !inputRefs?.current[currentWord][currentLetter].innerHTML) {
                 inputRefs.current[currentWord][currentLetter].innerHTML = keyPressed.toUpperCase();
             }
             setCurrentLetter(prevState=>prevState+1)
@@ -127,7 +129,7 @@ const Wordle = (props) => {
                 newCurrent =  currentLetter-1
             }
             setCurrentLetter(newCurrent)
-            if (inputRefs?.current[currentWord][newCurrent] && inputRefs?.current[currentWord][newCurrent]?.innerHTML) {
+            if (inputRefs && inputRefs?.current[currentWord][newCurrent] && inputRefs?.current[currentWord][newCurrent]?.innerHTML) {
                 inputRefs.current[currentWord][newCurrent].innerHTML = '';
             }
         }else {
@@ -146,7 +148,7 @@ const Wordle = (props) => {
     const findTheWord = (currentWord) => {
         let word = ''
         for (let i=1; i<=props.wordLength; i++) {
-            if(inputRefs?.current[currentWord][i] && inputRefs?.current[currentWord][i]?.innerHTML) {
+            if(inputRefs && inputRefs?.current[currentWord][i] && inputRefs?.current[currentWord][i]?.innerHTML) {
                 word = word + inputRefs?.current[currentWord][i]?.innerHTML
             }
         }
@@ -156,7 +158,9 @@ const Wordle = (props) => {
 
     const setColors = (currentWord, score) => {
         for(let i=1;i<=props.wordLength;i++) {
-            inputRefs.current[currentWord][i].style.backgroundColor = fillColorCode[score[i-1]];
+            if(inputRefs && inputRefs.current[currentWord][i] && inputRefs.current[currentWord][i].style) {
+                inputRefs.current[currentWord][i].style.backgroundColor = fillColorCode[score[i-1]];
+            }
         }
     }
 
